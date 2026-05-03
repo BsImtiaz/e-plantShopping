@@ -11,6 +11,12 @@ function ProductList({ onHomeClick }) {
 
     const dispatch = useDispatch();
 
+    const cartItems = useSelector((state) => state.cart.items);
+
+    const totalItems = cartItems.reduce((total, item) => {
+    return total + item.quantity;
+}, 0);
+
     const [showCart, setShowCart] = useState(false);
     const [addedToCart, setAddedToCart] = useState({});
 
