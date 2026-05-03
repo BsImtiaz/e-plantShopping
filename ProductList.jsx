@@ -1,21 +1,22 @@
-import { useSelector } from "react-redux";
 import React, { useState } from 'react';
 import './ProductList.css';
 import CartItem from './CartItem';
 
 // Redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "./CartSlice";
 
 function ProductList({ onHomeClick }) {
 
     const dispatch = useDispatch();
 
+    // ✅ Redux cart data
     const cartItems = useSelector((state) => state.cart.items);
 
+    // ✅ Total cart count
     const totalItems = cartItems.reduce((total, item) => {
-    return total + item.quantity;
-}, 0);
+        return total + item.quantity;
+    }, 0);
 
     const [showCart, setShowCart] = useState(false);
     const [addedToCart, setAddedToCart] = useState({});
@@ -57,7 +58,7 @@ function ProductList({ onHomeClick }) {
         }
     ];
 
-    // Add to cart
+    // ✅ Add to Cart
     const handleAddToCart = (plant) => {
         dispatch(addItem(plant));
 
@@ -67,11 +68,34 @@ function ProductList({ onHomeClick }) {
         }));
     };
 
+    const handleCartClick = () => {
+        setShowCart(true);
+    };
+
+    const handleContinueShopping = () => {
+        setShowCart(false);
+    };
+
     return (
         <div>
 
-            <h1>🌿 Paradise Nursery</h1>
+            {/* NAVBAR */}
+            <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "15px",
+                background: "#4CAF50",
+                color: "white"
+            }}>
+                <h2>🌿 Paradise Nursery</h2>
 
+                {/* ✅ CART COUNT (Task 4) */}
+                <button onClick={handleCartClick}>
+                    🛒 ({totalItems})
+                </button>
+            </div>
+
+            {/* PRODUCT / CART VIEW */}
             {!showCart ? (
                 <div className="product-grid">
 
@@ -92,7 +116,9 @@ function ProductList({ onHomeClick }) {
                                             onClick={() => handleAddToCart(plant)}
                                             disabled={addedToCart[plant.name]}
                                         >
-                                            {addedToCart[plant.name] ? "Added" : "Add to Cart"}
+                                            {addedToCart[plant.name]
+                                                ? "Added to Cart"
+                                                : "Add to Cart"}
                                         </button>
 
                                     </div>
@@ -104,7 +130,7 @@ function ProductList({ onHomeClick }) {
 
                 </div>
             ) : (
-                <CartItem />
+                <CartItem onContinueShopping={handleContinueShopping} />
             )}
 
         </div>
