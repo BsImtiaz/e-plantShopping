@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import React, { useState } from 'react';
 import './ProductList.css';
 import CartItem from './CartItem';
